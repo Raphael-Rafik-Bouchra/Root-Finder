@@ -166,9 +166,23 @@ def callFalsePosition(f,a,b,n,e,tab,button):
 
 
 def fixedPoint(g,xr,N,e,list):
+    func=parse_expr(g)
+    xi=Symbol('x')
+    derivative=func.diff(xi)
+
     def f(x): 
         f = eval(g)
         return f
+
+    def d(x): 
+        f = eval(str(derivative))
+        return f
+
+    check = abs(d(xr))
+    if(check >= 1):
+        print(check)
+        return None
+    
 
     for n in range(1,N+1):
         xr_old = xr
@@ -203,17 +217,23 @@ def callFixedPoint(g,xi,n,e,tab,button):
     end_time = time.time()
 
 
+    er_label = ttk.Label(tab,text='Fixed Point will Diverge',font=("Courier",15))
     root_label = ttk.Label(tab,text='Approx. Root = ' + str(root),font=("Courier",10))
     time_label = ttk.Label(tab,text='Execution Time = ' + str(end_time-start_time),font=("Courier",10))
     iter_label = ttk.Label(tab,text='# of Iterations = ' + str(len(tree.get_children())),font=("Courier",10))
- 
-    root_label.pack()
-    root_label.place(x=475,y=150)
-    time_label.pack()
-    time_label.place(x=475,y=250)
-    iter_label.pack()
-    iter_label.place(x=475,y=350)
 
+
+    if root == None:
+        er_label.pack()
+        er_label.place(x=500,y=250)
+    else:  
+        root_label.pack()
+        root_label.place(x=475,y=150)
+        time_label.pack()
+        time_label.place(x=475,y=250)
+        iter_label.pack()
+        iter_label.place(x=475,y=350)
+ 
     tree.pack(fill=BOTH)
     tree.place(x=50,y=100,height=300,width=400)
     iterations.place(x=450,y=100,height=300)
